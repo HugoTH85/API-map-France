@@ -1,0 +1,6 @@
+@carte_france_interactive_HostAddress = http://localhost:5191
+
+GET {{carte_france_interactive_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

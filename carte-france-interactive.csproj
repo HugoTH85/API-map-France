@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <RootNamespace>carte_france_interactive</RootNamespace>
+    <AssemblyName>carte-france-interactive</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

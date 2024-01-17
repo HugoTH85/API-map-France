@@ -1,6 +1,11 @@
 # Carte France Interactive
 
+## Docker integration
 
+```
+docker build -t image_name -f Dockerfile_name .
+docker run image_name
+```
 
 ## Getting started
 

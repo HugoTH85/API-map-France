@@ -1,0 +1,13 @@
+# Utilisez l'image officielle MySQL
+FROM mysql:latest
+
+# Informations d'identification pour créer la base de données et l'utilisateur
+ENV MYSQL_DATABASE=projet_archi \
+    MYSQL_USER=root \
+    MYSQL_PASSWORD=root \
+    MYSQL_ROOT_PASSWORD=root
+
+# Ajoutez un script SQL pour initialiser la base de données (si nécessaire)
+COPY database.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

@@ -4,27 +4,42 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/city", (int latitude, int longitude) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    // Utiliser les paramètres de latitude et longitude pour effectuer une requête dans la base de données
+    List<object>? response = GetCities(latitude,longitude);
 
-app.MapGet("/weatherforecast", () =>
+    if (response != null){
+        return Results.Ok(new { Response = response });
+    }
+    else{
+        return Results.NotFound("Villes non trouvées pour les coordonnées fournies, ou problème survenu lors de la recherche.");
+    }
+});
+
+app.MapPost("/city", (int latitude, int longitude) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    // Utiliser les paramètres de latitude et longitude pour effectuer une requête dans la base de données
+    List<object>? response = GetCities(latitude, longitude);
+
+    if (response != null){
+        return Results.Ok(new { Response = response });
+    }
+    else{
+        return Results.NotFound("Villes non trouvées pour les coordonnées fournies, ou problème survenu lors de la recherche.");
+    }
 });
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+//1° longitude = 74km
+//1° latitude = 100km
+List<object>? GetCities(int lat, int lon){
+    DBcontext db = new DBcontext();
+    string Request="select name,region,latitude,longitude,population from projet_archi.villes where pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5)<200;";
+
+    List<object>? Response=db.ExecuteQuery(Request);
+    db.CloseConnection();
+
+    return Response;
 }

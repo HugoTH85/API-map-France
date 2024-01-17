@@ -1,1 +1,0 @@
-dossier pour contenir les différentes classes définissant les structures de données

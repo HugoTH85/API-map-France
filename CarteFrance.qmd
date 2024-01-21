@@ -1,0 +1,139 @@
+---
+title: Darte de France des différentes villes
+type: website
+authors:
+    - Gabriel
+    - Ugueau
+execute:
+    echo: false
+format: 
+  html: 
+    grid:
+      margin-width: 00px
+      sidebar-width: 350px
+      body-width: 1200px
+---
+
+# Carte de France
+```{ojs}
+//| panel: sidebar
+viewof table = Inputs.table(cities)
+
+```
+
+
+```{ojs}
+width
+plot
+mutable zoom = 2350
+mutable dg = 0
+mutable hb = 47
+mutable point = [0, 47]
+mutable circle = d3.geoCircle().center(point).radius(range/230)()
+
+plot = Plot.plot({
+  width: 560,
+  height: 560,
+  projection: d3.geoMercator().scale(zoom).center([dg  , hb]),
+  marks: [
+    Plot.geo(countries, { stroke: "#333" , fill: "#E5F14E"}),
+    Plot.geo(regionsData, { stroke: "#000", fill: "none" }),
+    Plot.dot(cities, 
+      {y:"latitude", x:"longitude", stroke:"#FF7400", fill:"#FF7400", channels:
+        {name:"name", population:"population"}, 
+      tip:
+        {format:{latitude:false, longitude:false, name:true, population:true}, fontSize:25}
+      }
+    ),
+    Plot.dot(cities, Plot.pointer({y:"latitude", x:"longitude", fill: "red", r: 8})),
+    Plot.dot(cities, {x:point[0], y:point[1], fill:"#216C5C", stroke:"#216C5C"}),
+    Plot.geo(circle, {stroke: "#216C5C", strokeWidth: 2}),
+    
+  ]
+})
+mutable downclick = [0, 0]
+mutable upclick = [0, 0]
+mutable move = 0
+
+plot.addEventListener("mousedown", (event) => {
+  mutable downclick = [event.x, event.y]
+  mutable move = 1
+
+});
+plot.addEventListener("mouseup", (event) => {
+  mutable move = 0
+
+});
+plot.addEventListener("wheel", (event) => {
+  if(zoom < 100000 && zoom > 500){
+
+    mutable zoom = zoom - event.deltaY*10
+  }
+  else if(zoom < 500){
+    mutable zoom = 501
+  }
+  else if(zoom > 100000){
+    mutable zoom = 99999
+  }
+
+});
+plot.addEventListener("mousemove", (event) => {
+  mutable upclick = [event.x, event.y]
+  if((upclick[0] - downclick[0] > 2 || upclick[0] - downclick[0] < -2 || upclick[1] - downclick[1] > 2 || upclick[1] - downclick[1] < -2 ) && move==1){
+
+    mutable dg = dg - ((upclick[0] - downclick[0])/(10+(zoom/1000)))
+    mutable hb = hb + ((upclick[1] - downclick[1])/(25+(zoom/1000)))
+    mutable downclick = [event.x, event.y]
+
+  }
+});
+plot.addEventListener("click", (event) => {
+  // COnvertir event.x et event.y (ensemble x/y) en coordonnées lon/lat
+  const nombrelon = 65/zoom
+  const nombrelat = 50/zoom
+  mutable point = [(dg-(400*nombrelon)) + ((event.x-252)*nombrelon) ,(hb+(150*nombrelat)) - ((event.y-225)*nombrelat)]
+  console.log(plot)
+  console.log(event.x)
+  console.log(event.y)
+})
+plot.addEventListener("resize", () => {
+  // Set plot width and height to a fixed value
+  plot.setAttribute("width", 900);
+  plot.setAttribute("height", 900);
+  console.log("bfgreyffren")
+});
+
+```
+```{ojs}
+//| panel: input
+width
+layoutWidth
+viewof range = Inputs.range([0,1000], {step:1,label: "Nombre max de ville à afficher:"})
+viewof distance = Inputs.range([0,1000], {step:1,label: "Distance max:"})
+viewof population = Inputs.range([0,1000], {step:1, label: "Population min:"})
+
+```
+
+
+```{ojs}
+d3 = require("d3@6")
+
+
+france = countries.features.find(d => d.properties.NAME === "France")
+
+departements = FileAttachment("Data/departements.json").json()
+
+regionsData = FileAttachment("Data/regions.json").json()
+
+countries = topojson.feature(topology, topology.objects.ne_10m_admin_0_countries)
+
+topojson = require("topojson-client@3")
+
+topology = FileAttachment("Data/10m-countries_topo.json").json()
+
+cities =FileAttachment("Data/fr.csv").csv({typed:true})
+
+```
+
+
+# Filter

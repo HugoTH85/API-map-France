@@ -21,7 +21,9 @@ app.Run();
 
 //1° longitude ~ 74km
 //1° latitude ~ 100km
-List<object>? GetCities(int lat, int lon, int distance, int max_pop){
+using System.Drawing.Printing;
+
+List<object>? GetCities(double lat, double lon, int distance, int max_pop){
     DBcontext db = new DBcontext();
 
     string Request="select name,region,latitude,longitude,population,pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5) from projet_archi.villes where pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5)<"+distance.ToString()+" and population<="+max_pop.ToString()+";";
@@ -32,3 +34,26 @@ List<object>? GetCities(int lat, int lon, int distance, int max_pop){
 
     return Response;
 }
+
+/*
+PARTIE DE TEST DE LA REQUETE MYSQL (mettre en commentaire la partie requête API pour que ça fonctionne bien)
+
+double lat=48.8566;
+double lon=2.3522;
+int distance=200;
+int max_pop=2200000;
+
+List<object>? L=GetCities(lat,lon,distance,max_pop);
+
+if (L!=null){
+    foreach (List<object> item in L){
+        foreach (object thing in item){
+            Console.WriteLine(thing.GetType());
+        }
+        Console.WriteLine("\n\n");
+    }
+}
+else{
+    Console.WriteLine("Liste nulle.");
+}
+*/

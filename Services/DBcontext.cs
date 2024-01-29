@@ -40,11 +40,11 @@ class DBcontext
                         for (int i = 0; i < columnCount; i++)
                         {
                             // Accéder aux colonnes avec reader[i]
-                            Console.Write(reader[i] + "\t");
+                            //Console.Write(reader[i] + "\t");
                             row.Add(reader[i]);
                         }
                         L.Add(row);
-                        Console.WriteLine();
+                        //Console.WriteLine();
                     }
                     return L;
                 }

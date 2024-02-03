@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  api_carte_france:
+    image: image_api_carte_france:1.7
+    container_name: api_carte_france
+    networks:
+      - backend_carte_france
+    ports:
+      - "5000:8080"
+    restart: always
+
+  db_carte_france:
+    image: image_db_carte_france:1.5
+    container_name: db_carte_france
+    networks:
+      backend_carte_france:
+        ipv4_address: "172.23.0.3"
+    ports:
+      - "3307:3307"
+    restart: always
+
+networks:
+  backend_carte_france:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/16

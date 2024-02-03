@@ -59,3 +59,5 @@ C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte
 C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte France\carte-france-interactive\obj\Debug\net8.0\carte-france-interactive.pdb
 C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte France\carte-france-interactive\obj\Debug\net8.0\carte-france-interactive.genruntimeconfig.cache
 C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte France\carte-france-interactive\obj\Debug\net8.0\ref\carte-france-interactive.dll
+C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte France\carte-france-interactive\bin\Debug\net8.0\CsvHelper.dll
+C:\Users\trico\OneDrive\Documents\dossier Hugo\ESIEA\4A\Archi appli\Projet carte France\carte-france-interactive\bin\Debug\net8.0\System.Linq.Async.dll

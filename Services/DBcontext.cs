@@ -5,7 +5,7 @@ class DBcontext
 {
     MySqlConnection? conn;
     public DBcontext(){
-        string myConnectionString = "server=127.0.0.1;uid=root;pwd=root;database=projet_archi";
+        string myConnectionString = "server=172.23.0.3;uid=root;pwd=root;database=projet_archi";
         this.conn = null;
 
         try{

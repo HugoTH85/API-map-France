@@ -1,5 +1,5 @@
-@carte_france_interactive_HostAddress = http://localhost:5191
+@carte_france_interactive_HostAddress = http://localhost:5000
 
 ### Requête GET pour la méthode MapGet
-GET {{carte_france_interactive_HostAddress}}/city?latitude={{latitude}}&longitude={{longitude}}&distance={{distance}}&max_pop={{max_pop}}
-Accept: application/json
+GET {{carte_france_interactive_HostAddress}}/city?latitude=48.8566&longitude=2.3522&distance=100&max_pop=2000000 HTTP/1.1
+Accept: "text/csv"

@@ -22,7 +22,6 @@ WORKDIR /app
 # Copier les fichiers publiés depuis l'étape de build
 COPY --from=Build /app ./
 
-# Exposer le port nécessaire pour l'application
 EXPOSE 5000
 
 # Commande d'entrée pour exécuter l'application

@@ -4,13 +4,14 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.MapGet("/city", (int latitude, int longitude, int distance, int max_pop) =>
+app.MapGet("/city", (double latitude, double longitude, int distance, int max_pop) =>
 {
-    // Utiliser les paramètres de latitude et longitude pour effectuer une requête dans la base de données
-    List<object>? response = GetCities(latitude,longitude, distance, max_pop);
+    List<object>? cities = GetCities(latitude,longitude, distance, max_pop);
 
-    if (response != null){
-        return Results.Ok(new { Response = response });
+    if (cities != null){
+        String response = WriteCsv(cities);
+        
+        return Results.Text(response, "text/csv");
     }
     else{
         return Results.NotFound("Villes non trouvées pour les coordonnées fournies, ou problème survenu lors de la recherche.");
@@ -21,7 +22,6 @@ app.Run();
 
 //1° longitude ~ 74km
 //1° latitude ~ 100km
-using System.Drawing.Printing;
 
 List<object>? GetCities(double lat, double lon, int distance, int max_pop){
     DBcontext db = new DBcontext();
@@ -35,25 +35,19 @@ List<object>? GetCities(double lat, double lon, int distance, int max_pop){
     return Response;
 }
 
-/*
-PARTIE DE TEST DE LA REQUETE MYSQL (mettre en commentaire la partie requête API pour que ça fonctionne bien)
-
-double lat=48.8566;
-double lon=2.3522;
-int distance=200;
-int max_pop=2200000;
-
-List<object>? L=GetCities(lat,lon,distance,max_pop);
-
-if (L!=null){
-    foreach (List<object> item in L){
+static String WriteCsv(List<object> data){
+    String content="\"Ville\",\"Région\",\"Latitude\",\"Longitude\",\"Population\",\"Distance\"";
+    foreach (List<object> item in data){
+        List<String> temp=[];
         foreach (object thing in item){
-            Console.WriteLine(thing.GetType());
+            if (thing.GetType()=="test".GetType()){
+                temp.Add("\""+thing.ToString()+"\"");
+            }
+            else{
+                temp.Add(thing.ToString());
+            }
         }
-        Console.WriteLine("\n\n");
+        content+=Environment.NewLine+string.Join(',',temp);
     }
+    return content;
 }
-else{
-    Console.WriteLine("Liste nulle.");
-}
-*/

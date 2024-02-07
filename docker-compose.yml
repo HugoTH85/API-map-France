@@ -2,7 +2,7 @@ version: '3'
 
 services:
   api_carte_france:
-    image: image_api_carte_france:1.15
+    image: image_api_carte_france:1.14
     container_name: api_carte_france
     networks:
       - backend_carte_france

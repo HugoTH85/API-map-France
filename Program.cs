@@ -1,8 +1,21 @@
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy  =>
+                      {
+                          policy.WithOrigins("http://172.23.0.4:8080");
+                      });
+});
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapGet("/city", (double latitude, double longitude, int distance, int max_pop, string regions) =>
 {

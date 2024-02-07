@@ -5,14 +5,15 @@
 ### Méthode HTTP GET
 
 ## Description :
-Récupère les coordonnées en latitude et longitude d'un clic de souris avec des filtres établis (distance maximale définissant un rayon, population maximale, Régions prises en compte) et renvoie la liste des villes correspondantes sous format csv.
+Récupère les coordonnées en latitude et longitude d'un clic de souris avec des filtres établis (distance maximale définissant un rayon, population maximale, nombre de villes à retourner, régions prises en compte) et renvoie la liste des villes correspondantes sous format csv.
 
 ## Paramètres de requête :
 - latitude (obligatoire) : la latitude de la position géographique.
 - longitude (obligatoire) : la longitude de la position géographique.
 - distance (obligatoire) : la distance maximale (en kilomètres) à partir des coordonnées spécifiées.
 - max_pop (obligatoire) : la population maximale que doivent avoir les villes renvoyées.
-- regions (optionnel) : une liste de régions à prendre en compte pour filtrer les villes.
+- number (obligatoire) : le nombre de villes à retourner (classées de la plus proche à la plus loin du clic)
+- regions (obligatoire, peut être nul) : une liste de régions à prendre en compte pour filtrer les villes.
 
 ## Réponses :
 - Code 200 OK : renvoie une liste de villes au format CSV.
@@ -20,7 +21,7 @@ Récupère les coordonnées en latitude et longitude d'un clic de souris avec de
 - Code 404 Not Found : indique qu'aucune ville n'a été trouvée pour les paramètres spécifiés.
 
 ## Exemple de requête :
-http://localhost:5000/city?latitude=48.8566&longitude=2.3522&distance=1000&max_pop=2000000&regions=Ile%20de%20France,Pays%20de%20la%20Loire
+http://localhost:5000/city?latitude=48.8566&longitude=2.3522&distance=1000&max_pop=2000000&number=20&regions=Ile%20de%20France,Pays%20de%20la%20Loire
 
 ## Exemple de réponse :
 Ville,Région,Latitude,Longitude,Population,Distance

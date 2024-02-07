@@ -6,6 +6,6 @@ ENV MYSQL_DATABASE=projet_archi2 \
     MYSQL_ROOT_PASSWORD=root
 
 # Ajoutez un script SQL pour initialiser la base de données (si nécessaire)
-COPY output.sql /docker-entrypoint-initdb.d/
+COPY db_cities.sql /docker-entrypoint-initdb.d/
 
 #RUN touch /etc/mysql/my.cnf && echo -e "[mysqld]\nbinary-mode=1"

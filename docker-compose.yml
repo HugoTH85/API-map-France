@@ -2,7 +2,7 @@ version: '3'
 
 services:
   api_carte_france:
-    image: image_api_carte_france:1.13
+    image: image_api_carte_france:1.15
     container_name: api_carte_france
     networks:
       - backend_carte_france
@@ -11,7 +11,7 @@ services:
     restart: always
 
   db_carte_france:
-    image: image_db_carte_france:1.19
+    image: image_db_carte_france:1.20
     container_name: db_carte_france
     networks:
       backend_carte_france:

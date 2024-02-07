@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("carte-france-interactive")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bee3bf3222e4178fecc9faf70799328f8e49c56")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+412dc0df10df4d9475cf4363ecbb2b5db31c604f")]
 [assembly: System.Reflection.AssemblyProductAttribute("carte-france-interactive")]
 [assembly: System.Reflection.AssemblyTitleAttribute("carte-france-interactive")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

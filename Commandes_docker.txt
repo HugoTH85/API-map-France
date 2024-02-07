@@ -1,7 +1,0 @@
-docker build -f Dockerfile_project -t image_api_carte_france:1.6 .
-docker build -f Dockerfile_mysql -t image_db_carte_france:1.5 .
-
-docker network create --subnet 172.23.0.0/16 backend_carte_france
-
-docker run -d --name api_carte_france --network backend_carte_france -p 5000:8080 image_api_carte_france:1.6
-docker run -d --name db_carte_france --network backend_carte_france --ip 172.23.0.3 -p 3307:3307 image_db_carte_france:1.5

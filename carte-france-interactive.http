@@ -1,4 +1,4 @@
 @carte_france_interactive_HostAddress = http://localhost:5000
 
 ### Requête GET pour la méthode MapGet
-GET https://cors-anywhere.herokuapp.com/{{carte_france_interactive_HostAddress}}/city?latitude=48.8566&longitude=2.3522&distance=100&max_pop=2000000&regions=Ile%20de%20France,Pays%20de%20la%20Loire HTTP/1.1
+GET {{carte_france_interactive_HostAddress}}/city?latitude=48.8566&longitude=2.3522&distance=100&max_pop=2000000&number=50&regions=Ile%20de%20France,Pays%20de%20la%20Loire HTTP/1.1

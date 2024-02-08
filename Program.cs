@@ -17,9 +17,9 @@ app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.MapGet("/city", (double latitude, double longitude, int distance, int max_pop, int number, string regions) =>
+app.MapGet("/city", (double latitude, double longitude, int distance, int min_pop, int number, string regions) =>
 {
-    List<object>? cities = GetCities(latitude,longitude, distance, max_pop, regions);
+    List<object>? cities = GetCities(latitude,longitude, distance, min_pop, regions);
 
     if (cities != null){
         String response = WriteCsv(cities,number);
@@ -36,12 +36,12 @@ app.Run();
 //1° longitude ~ 74km
 //1° latitude ~ 100km
 
-List<object>? GetCities(double lat, double lon, int distance, int max_pop, string regions){
+List<object>? GetCities(double lat, double lon, int distance, int min_pop, string regions){
     DBcontext db = new DBcontext();
 
     List<string> RegionFilter=GetRegions(regions);
     
-    string Request="select name,region,latitude,longitude,population,pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5) as distance from projet_archi2.villes where pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5)<"+distance.ToString()+" and population<="+max_pop.ToString()+setRequestRegions(RegionFilter)+" order by distance;";
+    string Request="select name,region,latitude,longitude,population,pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5) as distance from projet_archi2.villes where pow(pow(100*(latitude-"+lat.ToString()+"),2)+pow(74*(longitude-"+lon.ToString()+"),2)"+",0.5)<"+distance.ToString()+" and population>="+min_pop.ToString()+setRequestRegions(RegionFilter)+" order by distance;";
 
     Console.WriteLine(Request);
 

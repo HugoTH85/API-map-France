@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\carte-france-interactive.props" />
+</Project>

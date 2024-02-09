@@ -1,0 +1,9 @@
+---
+title: "Home Page"
+format:
+    html: 
+        grid: 
+          body-width: 1300px
+---
+
+Bienvenue sur la [carte de france interactive](CarteFrance.qmd) ! 

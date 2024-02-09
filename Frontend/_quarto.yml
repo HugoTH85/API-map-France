@@ -1,0 +1,29 @@
+project:
+  type: website
+
+website:
+  title: "Carte de France"
+  
+  navbar:
+    logo-href: index.qmd
+    left:
+
+      - href: index.qmd
+        text: Home
+      - href: CarteFrance.qmd
+        text: Carte De France
+      - href: documentation.qmd
+        text: Documentation
+      - href: api.qmd
+        text: Documentation de l'API
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+preview:
+  host: "127.23.0.4"
+  port: 3000
+
+

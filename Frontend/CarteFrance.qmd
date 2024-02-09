@@ -1,0 +1,217 @@
+---
+title: Carte des différentes villes de France 
+type: website
+
+execute:
+    echo: false
+format: 
+  html: 
+    page-layout: custom
+---
+
+:::{layout="[[1 ,1],[1,1]]"}
+```{ojs}
+mutable url = "http://localhost:5000/city?"
+mutable zoom = 2000
+mutable dg = 7
+mutable hb = 47
+mutable point = [2, 47]
+
+mutable circle = d3.geoCircle().center(point).radius(range/200)()
+
+mutable proj = d3.geoMercator().scale(zoom).center([dg  , hb])
+plot = Plot.plot({
+  width: 500,
+  height: 500,
+  projection: proj,
+  marks: [
+    Plot.geo(countries, { stroke: "#333" , fill: "#eee"}),
+    Plot.geo(regionsData, { stroke: "#000", fill: (d)=>{
+      if(region[0]=="Toutes les régions" ){
+        return "green";
+      }
+      else if(region.includes(d.properties.nom)){
+        return "green";
+      }
+      else{
+        return "#eee";
+      }
+    }}),
+    Plot.dot(cities, 
+      {y:"latitude", x:"longitude", stroke:"#FF7400", fill:"#FF7400", channels:
+        {name:"name", population:"population"}, 
+      tip:
+        {format:{latitude:false, longitude:false, name:true, population:true}, fontSize:25}
+      }
+    ),
+    Plot.dot(cities, Plot.pointer({y:"latitude", x:"longitude", fill: "red", r: 1})),
+    Plot.dot(cities, {x:point[0], y:point[1], fill:"#216C5C", stroke:"#216C5C"}),
+    Plot.geo(circle, {stroke: "#216C5C", strokeWidth: 2}),
+    
+  ]
+})
+
+```
+
+
+```{ojs}
+//| panel: sidebar
+viewof table = Inputs.table(cities, {
+  columns:[
+    "name",
+    "region",
+    "population",
+    "distance"
+  ],
+  header:{
+    name: "Noms",
+    region: "Region",
+    population: "Population",
+    distance: "Distance"
+  }
+})
+
+```
+
+
+
+```{ojs}
+//| panel: input
+viewof NumberCities = Inputs.range([1,2000], {step:1,label: "Nombre max de ville à afficher:", value: 1000})
+viewof range = Inputs.range([1,1000], {step:1,label: "Distance max:"})
+viewof population = Inputs.range([0,10000000], {step:1, label: "Population minimal:", value:0})
+
+```
+
+```{ojs}
+//| panel: sidebar
+
+viewof region = Inputs.checkbox(["Toutes les régions", "Auvergne-Rhone-Alpes", "Bourgogne-Franche-Comte", "Bretagne", "Centre-Val de Loire", "Corse", "Grand Est", "Hauts-de-France","Ile-de-France", "Normandie", "Nouvelle-Aquitaine", "Occitanie", "Pays de la Loire", "Provence-Alpes-Cote d’Azur" ], {value:["Toutes les régions"]})
+
+
+viewof button = Inputs.button("Rechercher", { reduce: () => LoadData()})
+
+```
+:::
+
+```{ojs}
+//| output: false
+{
+  
+  const clickplot = d3.select(plot).on("click",handleclick);    
+  const zoomplot = d3.zoom().on("zoom", handlezoom);
+  function handlezoom(e){
+    mutable zoom = zoom * e.transform.k
+    if(zoom<150){
+      mutable zoom = 150
+    }
+    if(zoom>20000){
+      mutable zoom = 20000
+    }
+    if(zoom<2000){
+      mutable dg = dg -(e.transform.x/30)
+      mutable hb = hb +(e.transform.y/40)
+    }
+    else if(zoom <5000){
+      mutable dg = dg -(e.transform.x/60)
+      mutable hb = hb +(e.transform.y/90)
+
+    }
+    else if(zoom<10000){
+      mutable dg = dg -(e.transform.x/100)
+      mutable hb = hb +(e.transform.y/150)
+    }
+    
+  }
+
+  function handleclick(e){
+    var p = proj.invert(d3.pointer(e));
+    mutable point = p
+  }
+  function initZoom(){
+    d3.select(plot).call(zoomplot)
+  }
+  initZoom();
+}
+```
+
+```{ojs}
+//| output: false
+mutable d = 0
+
+
+// Définir l'URL de l'API
+function LoadData()
+{
+  const url_cities = "&number="+NumberCities
+  const url_distance = "&distance="+parseInt(range/2)
+  const url_pop = "&min_pop="+population
+
+  let url_region = "&regions=" 
+  for(let i=0; i<region.length; i++){
+    if(region[i]=="Toutes les régions"){
+      url_region = "&regions="
+      break
+    }
+    if(i==0){
+      url_region= url_region+region[i]
+    }
+    else{
+      url_region= url_region+","+region[i]
+
+    }
+  }
+  const url_latitude = "latitude="+point[1]
+  const url_longitude = "&longitude="+point[0]
+  const url_toput = url +url_latitude+url_longitude+url_distance+url_pop+url_cities+url_region
+
+  // Envoyer une requête GET
+  fetch(url_toput)
+  .then(response => response.text())
+  .then(datas => {
+    const parsedData = papaparse.parse(datas, { header: true }).data;
+    mutable d = papaparse.parse(datas)["data"]
+    const citiesData = parsedData.map(d => {
+      return {
+        name: d.Ville,
+        region: d.Région,
+        population: parseInt(d.Population),
+        latitude: parseFloat(d.Latitude),
+        longitude: parseFloat(d.Longitude),
+        distance: parseFloat(d.Distance)
+      };
+    });
+    mutable cities = citiesData
+  })
+  .catch(error => {
+    // Gérer les erreurs
+    console.error(error);
+  });
+}
+
+function transpose(matrix) {
+  return _.zip(...matrix);
+}
+
+```
+
+```{ojs}
+//| output: false
+
+d3 = require("d3@7")
+papaparse  = require("papaparse")
+
+regionsData = FileAttachment("Data/regions.json").json()
+
+regionData
+countries = topojson.feature(europe, europe.objects.europe)
+
+
+topojson = require("topojson-client@3")
+
+europe= FileAttachment("Data/europe.topojson").json()
+mutable cities =FileAttachment("Data/fr.csv").csv({typed:true})
+
+```
+
+

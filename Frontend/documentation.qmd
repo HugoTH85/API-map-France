@@ -1,0 +1,93 @@
+---
+title: "Documentaiton du projet"
+format:
+    html: 
+        grid: 
+          body-width: 1300px
+authors:
+    - Gabriel LORGET
+    - Hugo TRICOIRE
+---
+# Documentation - Carte interactive de France
+
+
+## Installation du projet
+
+Tout d'abord, vérifiez que vos ports 3000, 3310 et 5000 ne sont pas déjà utilisés. Si c'est le cas, veuillez les libérer pour le bon fonctionnement du projet. Vous pouvez voir les ports utilisés en utilisant la commande suivante dans un terminal :
+```bash
+netstat -a
+```
+Placez-vous dans le répertoire racine du projet et exécutez la commande suivante :
+```bash
+docker-compose up -d
+```
+Une fois la commande exécutée, rendez-vous sur [cette page](http://localhost:3000/)
+
+Vous arrivez sur l'interface web de notre projet. L'installation est donc terminée.
+
+## Manipulation de l'interface web
+
+Le projet se situe à l'addresse suivante [Carte de France](CarteFrance.qmd).
+
+Une carte se situe en haut à gauche, elle est interactive (zoom et déplacement). Il vous suffit de cliquer sur un endroit de la carte pour déplacer le bouton de sélection (en vert). Puis de modifier les filtres pour qu'ils correspondent à vos attentes et enfin cliquer sur le bouton "Rechercher" pour démarrer le requête. 
+
+Dans la partie supérieure droite de l'interface web, vous pouvez apercevoir un tableau affichant les informations relatives aux villes affichées correspondant à la recherche.
+
+## Architecture du projet type Client-Server
+
+Nous avons choisi de séparer notre projet en 3 parties (ce qui explique les 3 conteneurs du projet):
+
+- Une base de données MySQL (conteneur "db_carte_france")
+- Une API en C# (conteneur "api_carte_france")
+- Une interface web en Quarto (conteneur "front_carte_france")
+
+Cela permet d'isoler chaque service afin d'assurer une meilleure flexibilité du projet pour d'éventuelles mises à jour à l'avenir et rend le développement du projet plus simple.
+
+## Langages, technologies et packages utilisés
+
+### Pour la base de données
+- Système de gestion de bases de données : MySQL
+
+### Pour l'API
+- Langage :
+    - C#
+- Packages :
+    - MySql.Data.MySqlClient
+    - System
+- Middleware :
+    - CORS
+
+### Pour l'interface web
+- Technologies :
+    - Quarto
+    - d3
+- Langages :
+    - ObservableHQ
+    - Javascript
+    - yaml
+
+### Conteneurisation
+- Technologies :
+    - Docker
+- Services :
+    - DockerHub
+- Langages :
+    - Yaml
+
+## Expérience
+
+Nous n'avons pas changé notre architecture durant le projet, étant donné que nous y avions bien réfléchi en amont. Voyant que notre projet évoluait correctement depuis le début, nous n'avons donc pas envisagé de solutions alternatives à celles initialement prévue.
+
+Si nous avions eu plus de temps, nous aurions sûrement :
+
+- Améliorer la sécurité de notre projet, en mettant en place par exemple un reverse-proxy afin d'éviter une connexion directe au serveur.
+- Mettre en place le protocole HTTPS afin de rendre notre interface web fiable aux yeux des utilisateurs. 
+- Etendre le projet sur la carte du Monde.
+- Améliorer l'interface utilisateur (carte, filtre, esthétique).
+
+
+## About
+
+Pour en savoir plus sur notre technologie, veuillez vous rendre sur [cette page](api.qmd).
+
+Pour tester notre Carte interactive de france rendez vous [ici](CarteFrance.qmd) 

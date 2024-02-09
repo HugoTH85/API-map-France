@@ -20,7 +20,7 @@ services:
       - "3310:3310"
     restart: always
   front_carte_france:
-    image: cmooooi/cdf:1.16
+    image: cmooooi/cdf:1.17
     container_name: front_carte_france
     networks:
       backend_carte_france:
